@@ -1,0 +1,55 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 1rem;
+}
+
+form label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+form input[type='text'],
+form input[type='text'],
+form input[type='tel'],
+form input[type='url'],
+button {
+  width: 50%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+th {
+  text-align: left;
+  background-color: #eee;
+  font-weight: 500;
+}
+
+#edit, #delete {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 16px;
+  display: inline-block;
+  width: 100%;
+}
+
+button:hover {
+  color: #0069d9;
+}
+
+button:active {
+  color: #0062cc;
+}
