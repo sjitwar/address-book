@@ -3,52 +3,55 @@ import "./App.css";
 
 class AddressBook extends React.Component {
   state = {
-    records: [],
+    records: [], // this array stores the records
     firstName: '',
     lastName: '',
     phone: '',
     email: '',
-    editing: false,
-    currentIndex: -1,
+    editing: false, // track if record is being edited or added
+    currentIndex: -1, // index of the current record being edited/deleted
   };
-
+// invoked when after component is mounted
+// to reload data from the server
   componentDidMount() {
-    this.fetchRecords();
+    this.fetchRecords(); // fetch records from json file
   }
-
+  //fetches records from the server
   fetchRecords = async () => {
     const response = await fetch('http://localhost:3000/api/records');
     const records = await response.json();
-    this.setState({ records });
+    this.setState({ records }); // stores them in a array
   };
 
   handleChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value });   // updates fields when changed
   };
-
+  // called when form is submitted
   handleSubmit = async event => {
     event.preventDefault();
-    if (this.state.editing) {
-      const updatedRecord = {
+    if (this.state.editing) { // when record is being edited
+      const updatedRecord = {     // constructing the updated record
         firstName: this.state.firstName,
         lastName: this.state.lastName,
         phone: this.state.phone,
         email: this.state.email,
       };
+      // sending request to server to update
       await fetch(`http://localhost:3000/api/records/${this.state.currentIndex}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedRecord),
       });
       this.setState({ editing: false });
-    } else {
+    } else {                      // when record is being added
       const newRecord = {
-        firstName: this.state.firstName,
+        firstName: this.state.firstName,   // construct new record object 
         lastName: this.state.lastName,
         phone: this.state.phone,
         email: this.state.email,
       };
+      // sending request to POST new record
       await fetch('http://localhost:3000/api/records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,9 +64,9 @@ class AddressBook extends React.Component {
       phone: '',
       email: '',
     });
-    this.fetchRecords();
+    this.fetchRecords(); // updating with new record
   };
-
+  // called when edit button is clicked
   handleEdit = (index, record) => {
     this.setState({
       firstName: record.firstName,
@@ -71,11 +74,12 @@ class AddressBook extends React.Component {
       phone: record.phone,
       email: record.email,
       editing: true,
-      currentIndex: index,
+      currentIndex: index, // set current index to the record being edited
     });
   };
-
+  // called when delete button is clicked
   handleDelete = async index => {
+    // sending DELETE request to delete the record
     await fetch(`http://localhost:3000/api/records/${index}`, {
       method: 'DELETE',
     });
@@ -84,6 +88,7 @@ class AddressBook extends React.Component {
 
   render() {
     return (
+      //  form to add edit delete records
       <div>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="name">First name:</label>
@@ -129,6 +134,7 @@ class AddressBook extends React.Component {
           )}
         </form>
         <br />
+        {/* display records */}
         <table>
           <tbody>
             {this.state.records.map((record, index) => (

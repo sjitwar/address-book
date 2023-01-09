@@ -3,23 +3,28 @@ const cors = require('cors');
 const fs = require('fs');
 const app = express();
 
-app.use(cors());
+app.use(cors()); // to tackle cors erros in console
 app.use(express.json());
 
+// GET request to fetch all records 
 app.get('/api/records', (req, res) => {
+    // reading the json file
   fs.readFile('./Data.json', 'utf8', (err, data) => {
     if (err) {
       throw err;
     }
+    // records sent as a response
     res.send(JSON.parse(data));
   });
 });
 
+// POST request to add new record
 app.post('/api/records', (req, res) => {
   fs.readFile('./Data.json', 'utf8', (err, data) => {
     if (err) {
       throw err;
     }
+    // add new record to array then write to file
     const entries = JSON.parse(data);
     entries.push(req.body);
     fs.writeFile('./Data.json', JSON.stringify(entries), err => {
@@ -31,11 +36,13 @@ app.post('/api/records', (req, res) => {
   });
 });
 
+// PUT request to edit/update record
 app.put('/api/records/:id', (req, res) => {
   fs.readFile('./Data.json', 'utf8', (err, data) => {
     if (err) {
       throw err;
     }
+    // update record with the id/indexed passed
     const records = JSON.parse(data);
     const updatedRecords = records.map((record, index) => {
       if (index === parseInt(req.params.id)) {
@@ -52,6 +59,7 @@ app.put('/api/records/:id', (req, res) => {
   });
 });
 
+// DELETE request to delete record in file
 app.delete('/api/Records/:id', (req, res) => {
   fs.readFile('./Data.json', 'utf8', (err, data) => {
     if (err) {
